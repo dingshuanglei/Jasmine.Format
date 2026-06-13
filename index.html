@@ -1,0 +1,189 @@
+﻿
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Jasmine.Format 演示</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .demo-section { margin-bottom: 40px; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #fafafa; }
+        .demo-section h3 { margin-top: 0; color: #333; }
+        .demo-output { margin-top: 10px; padding: 15px; background: white; border-radius: 4px; border: 1px solid #ddd; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
+        .card { border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin: 10px 0; }
+        .card h3 { margin-top: 0; }
+        .card .content { color: #666; }
+        .card .tip { font-size: 12px; color: #999; margin-top: 10px; }
+        .code-block { background: #2d2d2d; color: #ccc; padding: 12px; border-radius: 4px; font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; overflow-x: auto; }
+        .output-box { border: 1px dashed #ccc; padding: 10px; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Jasmine.Format 演示</h1>
+
+<div class='demo-section'>
+    <h3>1. HtmlFormatHelper - HTML 模板格式化</h3>
+
+    <div class='card'>
+        <h4>Format - 位置参数格式化（自动HTML编码）</h4>
+        <div class='code-block'>var userInput = "&lt;script&gt;alert('test')&lt;/script&gt;";<br/>HtmlFormatHelper.Format("用户输入: {0}", userInput)</div>
+        <div class='output-box'><strong>输出:</strong> 用户输入: &lt;script&gt;alert(&#39;test&#39;)&lt;/script&gt;</div>
+    </div>
+
+    <div class='card'>
+        <h4>FormatTemplate - 命名参数格式化</h4>
+        <div class='code-block'>HtmlFormatHelper.FormatTemplate("姓名: {name}, 年龄: {age}",<br/>&nbsp;&nbsp;new KeyValuePair("name", "张三"),<br/>&nbsp;&nbsp;new KeyValuePair("age", "25"))</div>
+        <div class='output-box'><strong>输出:</strong> 姓名: 张三, 年龄: 25</div>
+    </div>
+
+    <div class='card'>
+        <h4>FormatTemplate - Dictionary 参数</h4>
+        <div class='code-block'>var dict = new Dictionary&lt;string, string&gt; { {"title", "产品标题"}, {"price", "¥99.00"} };<br/>HtmlFormatHelper.FormatTemplate("商品: {title}, 价格: {price}", dict)</div>
+        <div class='output-box'><strong>输出:</strong> 商品: 产品标题, 价格: ¥99.00</div>
+    </div>
+</div>
+
+<div class='demo-section'>
+    <h3>2. HtmlSpan - Span 元素构建</h3>
+
+    <div class='card'>
+        <h4>HtmlSpan 基础用法</h4>
+        <div class='code-block'>new HtmlSpan("普通文本").ToHtml()</div>
+        <div class='output-box'><strong>输出:</strong> <span>普通文本</span></div>
+    </div>
+
+    <div class='card'>
+        <h4>HtmlSpan 带颜色</h4>
+        <div class='code-block'>new HtmlSpan("红色文本", "#ff0000").ToHtml()</div>
+        <div class='output-box'><strong>输出:</strong> <span style="color:#ff0000;">红色文本</span></div>
+    </div>
+
+    <div class='card'>
+        <h4>HtmlSpan 带颜色和样式</h4>
+        <div class='code-block'>new HtmlSpan("带样式文本", "#0066cc", "font-weight:bold; text-decoration:underline;").ToHtml()</div>
+        <div class='output-box'><strong>输出:</strong> <span style="color:#0066cc;font-weight:bold; text-decoration:underline;">带样式文本</span></div>
+    </div>
+</div>
+
+<div class='demo-section'>
+    <h3>3. HtmlP - 基础用法</h3>
+
+    <div class='card'>
+        <h4>Add - 添加普通文本</h4>
+        <div class='code-block'>new HtmlP().Add("普通段落文本").ToHtml()</div>
+        <div class='output-box'><p>普通段落文本</p></div>
+    </div>
+
+    <div class='card'>
+        <h4>Add + AddSpan - 链式调用（文本 + Span）</h4>
+        <div class='code-block'>new HtmlP().Add("您好，").AddSpan("张三", "#0066cc").Add("，欢迎使用！").ToHtml()</div>
+        <div class='output-box'><p>您好，<span style="color:#0066cc;">张三</span>，欢迎使用 Jasmine.Format！</p></div>
+    </div>
+
+    <div class='card'>
+        <h4>HtmlP(style) - 带样式的段落</h4>
+        <div class='code-block'>new HtmlP("color:#666; font-size:14px;").Add("带样式的段落").ToHtml()</div>
+        <div class='output-box'><p style="color:#666; font-size:14px;">带样式的段落</p></div>
+    </div>
+
+    <div class='card'>
+        <h4>AddRaw - 添加原始 HTML</h4>
+        <div class='code-block'>new HtmlP().Add("文本前的空格: ").AddRaw("<strong>这是粗体文本</strong>").Add("，后面是普通文本").ToHtml()</div>
+        <div class='output-box'><p>文本前的空格: <strong>这是粗体文本</strong>，后面是普通文本</p></div>
+    </div>
+
+    <div class='card'>
+        <h4>AddSpan(HtmlSpan) - 添加预构建的 HtmlSpan</h4>
+        <div class='code-block'>new HtmlP().AddSpan(new HtmlSpan("预构建的 HtmlSpan", "#993366")).ToHtml()</div>
+        <div class='output-box'><p><span style="color:#993366;">预构建的 HtmlSpan</span></p></div>
+    </div>
+</div>
+
+<div class='demo-section'>
+    <h3>4. HtmlP - 条件添加</h3>
+
+    <div class='card'>
+        <h4>AddSpanIf(bool) - 布尔条件判断</h4>
+        <div class='code-block'>bool isAdmin = true;<br/>new HtmlP().Add("用户状态：").AddSpanIf(isAdmin, "管理员", "#009900").AddSpanIf(!isAdmin, "普通用户", "#999999").ToHtml()</div>
+        <div class='output-box'><p>用户状态：<span style="color:#009900;">管理员</span></p></div>
+    </div>
+
+    <div class='card'>
+        <h4>AddIf(bool) - 条件添加文本</h4>
+        <div class='code-block'>bool hasDiscount = false;<br/>new HtmlP().Add("商品价格：¥99.00").AddIf(hasDiscount, " 限时优惠！", false).ToHtml()</div>
+        <div class='output-box'><p>商品价格：¥99.00</p></div>
+    </div>
+
+    <div class='card'>
+        <h4>AddSpanIf&lt;T&gt;(source, predicate) - 基于对象条件判断</h4>
+        <div class='code-block'>var user = new { Name = "王五", Score = 95 };<br/>new HtmlP().Add("用户 ").AddSpan(user.Name, "#0066cc").Add(" 的等级：").AddSpanIf(user, u => u.Score &gt;= 90, "优秀", "#009900").ToHtml()</div>
+        <div class='output-box'><p>用户 <span style="color:#0066cc;">王五</span> 的等级：<span style="color:#009900;">优秀</span></p></div>
+    </div>
+
+    <div class='card'>
+        <h4>AddRawIf(bool) - 条件添加原始 HTML</h4>
+        <div class='code-block'>bool showWarning = true;<br/>new HtmlP().Add("系统状态：正常").AddRawIf(showWarning, " &lt;span style='color:#ff6600;'&gt;⚠ 有新消息&lt;/span&gt;").ToHtml()</div>
+        <div class='output-box'><p>系统状态：正常 <span style='color:#ff6600;'>⚠ 有新消息</span></p></div>
+    </div>
+</div>
+
+<div class='demo-section'>
+    <h3>5. HtmlP - 批量添加</h3>
+
+    <div class='card'>
+        <h4>AddSpanRange(IEnumerable&lt;string&gt;) - 批量添加带样式的标签</h4>
+        <div class='code-block'>var tags = new List&lt;string&gt; { "C#", "ASP.NET", "HTML", "CSS" };<br/>new HtmlP().Add("技术标签：").AddSpanRange(tags, "#ff6600", "font-size:12px; padding:2px 6px; background:#fff3e0; border-radius:3px;").ToHtml()</div>
+        <div class='output-box'><p>技术标签：<span style="color:#ff6600;">C#</span>font-size:12px; padding:2px 6px; background:#fff3e0; border-radius:3px;<span style="color:#ff6600;">ASP.NET</span>font-size:12px; padding:2px 6px; background:#fff3e0; border-radius:3px;<span style="color:#ff6600;">HTML</span>font-size:12px; padding:2px 6px; background:#fff3e0; border-radius:3px;<span style="color:#ff6600;">CSS</span></p></div>
+    </div>
+
+    <div class='card'>
+        <h4>AddRange(IEnumerable&lt;string&gt;) - 批量添加文本</h4>
+        <div class='code-block'>var fruits = new List&lt;string&gt; { "苹果", "香蕉", "橙子" };<br/>new HtmlP().Add("水果列表：").AddRange(fruits, "、").ToHtml()</div>
+        <div class='output-box'><p>水果列表：苹果、香蕉、橙子</p></div>
+    </div>
+
+    <div class='card'>
+        <h4>AddSpanRange&lt;T&gt;(selector) - 使用选择器批量添加对象属性</h4>
+        <div class='code-block'>var products = new List&lt;Product&gt; { ... };<br/>new HtmlP().Add("商品列表：").AddSpanRange(products, p =&gt; $"{p.Name} (¥{p.Price})", "#333", "font-size:13px; margin-right:15px;").ToHtml()</div>
+        <div class='output-box'><p>商品列表：<span style="color:#333;">笔记本电脑 (¥5999)</span>font-size:13px; margin-right:15px;<span style="color:#333;">无线鼠标 (¥99)</span>font-size:13px; margin-right:15px;<span style="color:#333;">机械键盘 (¥299)</span></p></div>
+    </div>
+
+    <div class='card'>
+        <h4>Add(text, count) - 重复添加文本</h4>
+        <div class='code-block'>new HtmlP().Add("重复文本：").Add("★", 5, false).ToHtml()</div>
+        <div class='output-box'><p>重复文本：★★★★★</p></div>
+    </div>
+</div>
+
+<div class='demo-section'>
+    <h3>6. 综合示例 - 用户信息卡片</h3>
+
+    <div style='border:1px solid #e0e0e0; border-radius:8px; padding:20px; background:white;'>
+        <h4 style='margin-top:0; color:#333;'>用户信息</h4>
+        <p>姓名：<span style="color:#0066cc;">李四</span>，年龄：30岁，角色：<span style="color:#009900;">高级工程师</span>（在线）</p>
+        <p style="margin-top:10px;">技能：<span style="color:#666666;">.NET</span>display:inline-block; padding:3px 8px; background:#f0f0f0; border-radius:4px; font-size:12px; margin:2px;<span style="color:#666666;">React</span>display:inline-block; padding:3px 8px; background:#f0f0f0; border-radius:4px; font-size:12px; margin:2px;<span style="color:#666666;">Docker</span></p>
+        <p>评级：<span style="color:#ff6600;font-weight:bold; font-size:18px;">S</span></p>
+    </div>
+
+    <div class='card' style='margin-top:20px;'>
+        <h4>代码示例</h4>
+        <div class='code-block'>
+var user = new { Name = "李四", Age = 30, Role = "高级工程师", Skills = new[] { ".NET", "React", "Docker" }, IsActive = true, Score = 98 };<br/>
+<br/>
+var cardHtml = new HtmlP()<br/>
+    .Add("姓名：").AddSpan(user.Name, "#0066cc").Add("，")<br/>
+    .Add("年龄：").Add(user.Age.ToString()).Add("岁，")<br/>
+    .Add("角色：").AddSpan(user.Role, "#009900")<br/>
+    .AddIf(user.IsActive, "（在线）", false)<br/>
+    .ToHtml();<br/>
+<br/>
+var skillTags = new HtmlP("margin-top:10px;")<br/>
+    .Add("技能：")<br/>
+    .AddSpanRange(user.Skills, "#666666", "display:inline-block; padding:3px 8px; background:#f0f0f0; border-radius:4px; font-size:12px; margin:2px;");
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

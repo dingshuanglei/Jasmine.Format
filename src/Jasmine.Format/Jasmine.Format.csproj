@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageId>Jasmine.Format</PackageId>
+		<PackageVersion>1.0.0</PackageVersion>
+		<Authors>dingshuanglei</Authors>
+		<Description>HTML Format Component for generating HTML content</Description>
+		<PackageTags>HTML;format;generator</PackageTags>
+		<RepositoryUrl>https://github.com/dingshuanglei/Jasmine.Format</RepositoryUrl>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Copyright>dingshuanglei</Copyright>
+		<PackageProjectUrl>https://github.com/dingshuanglei/Jasmine.Format</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>

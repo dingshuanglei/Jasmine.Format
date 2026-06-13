@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Jasmine.Format.Demo/Jasmine.Format.Demo.csproj" />
+    <Project Path="src/Jasmine.Format/Jasmine.Format.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Jasmine.Format.Tests/Jasmine.Format.Tests.csproj" Id="2d073499-375a-4958-b081-18689a5f722d" />
+  </Folder>
+</Solution>
