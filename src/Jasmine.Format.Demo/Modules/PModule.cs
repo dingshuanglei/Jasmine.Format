@@ -31,6 +31,16 @@ namespace Jasmine.Format.Demo.Modules
             var p9 = new HtmlP().AddSpanRange(trains, t => new HtmlSpan(t.Status, t.Status == "正常" ? "green" : "red", "font-weight:bold;")).WithStyle("text-indent: 28px;font-weight: 600;font-size:15px;margin-bottom: 0;");
             var p10 = new HtmlP().Add("列车详情：").AddRawRange(trains, t => $"{new HtmlSpan(t.Station, "red")}开{new HtmlSpan(t.TrainNo, "blue")}次{new HtmlSpan(t.Status, t.Status == "正常" ? "green" : "red")}").WithStyle("text-indent: 28px;font-weight: 600;font-size:15px;margin-bottom: 0;");
 
+            // ToPlainText 示例 - 复杂内容对比
+            var complexP = new HtmlP()
+                .Add("用户：")
+                .Add(new HtmlSpan("张三", "#0066cc", "font-weight:bold;"))
+                .Add(" - ")
+                .Add(new HtmlA("查看资料", Constants.TestDomainUrl, "_blank"))
+                .Add(" - ")
+                .Add(new HtmlImg(Constants.TestImageUrl, "头像"));
+            var plainText = complexP.ToPlainText();
+
             AddCard(htmlBuilder, "Add - 添加文本", @"new HtmlP().Add(""普通段落文本"").ToHtml()", p1.ToHtml());
             AddCard(htmlBuilder, "Add + HtmlSpan - 链式调用", @"new HtmlP().Add(""您好，"").Add(new HtmlSpan(""张三"", ""#0066cc"")).Add(""，欢迎使用！"").ToHtml()", p2.ToHtml());
             AddCard(htmlBuilder, "Add + HtmlA - 添加链接", @"new HtmlP().Add(""访问 "").Add(new HtmlA(""示例网站"", Constants.TestDomainUrl)).Add("" 了解更多"").ToHtml()", p3.ToHtml());
@@ -41,6 +51,8 @@ namespace Jasmine.Format.Demo.Modules
             AddCard(htmlBuilder, "AddSpanRange - 返回HtmlSpan", @"new HtmlP().Add(""列车详情："").AddSpanRange(trains, t => new HtmlSpan($""{t.Station}开{t.TrainNo}"", ""red""))", p8.ToHtml());
             AddCard(htmlBuilder, "AddSpanRange - 动态样式", @"new HtmlP().AddSpanRange(trains, t => new HtmlSpan(t.Status, t.Status == ""正常"" ? ""green"" : ""red"", ""font-weight:bold;""))", p9.ToHtml());
             AddCard(htmlBuilder, "AddRawRange - 多个Span组合", @"new HtmlP().Add(""列车详情："").AddRawRange(trains, t => $""{new HtmlSpan(t.Station, ""red"")}开{new HtmlSpan(t.TrainNo, ""blue"")}次{new HtmlSpan(t.Status, t.Status == ""正常"" ? ""green"" : ""red"")}"")", p10.ToHtml());
+            AddCard(htmlBuilder, "ToPlainText - 提取纯文本 (HTML)", @"complexP.ToHtml()", complexP.ToHtml());
+            AddCard(htmlBuilder, "ToPlainText - 提取纯文本 (Text)", @"complexP.ToPlainText()", $"<span>{plainText}</span>");
 
             AddSectionEnd(htmlBuilder);
         }

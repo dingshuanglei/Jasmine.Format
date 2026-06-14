@@ -182,6 +182,54 @@ namespace Jasmine.Format.Elements.Text
         }
 
         /// <summary>
+        /// Creates a new HtmlP with the same content but without any style.
+        /// </summary>
+        /// <returns>A new HtmlP instance with the same content but no style.</returns>
+        public HtmlP ClearStyle()
+        {
+            return new HtmlP(Elements, null);
+        }
+
+        /// <summary>
+        /// Extracts plain text content from the paragraph, stripping all HTML tags.
+        /// </summary>
+        /// <returns>The plain text content without any HTML tags.</returns>
+        public string ToPlainText()
+        {
+            if (IsEmpty)
+                return string.Empty;
+
+            StringBuilder sb = StringBuilderCache.Acquire();
+            try
+            {
+                foreach (var element in Elements)
+                {
+                    if (element is HtmlTextElement textElement)
+                    {
+                        sb.Append(textElement.Value);
+                    }
+                    else if (element is HtmlSpan span)
+                    {
+                        sb.Append(span.Content);
+                    }
+                    else if (element is HtmlA link)
+                    {
+                        sb.Append(link.Content);
+                    }
+                    else if (element is HtmlImg img)
+                    {
+                        sb.Append(img.Alt ?? string.Empty);
+                    }
+                }
+                return sb.ToString();
+            }
+            finally
+            {
+                StringBuilderCache.Release(sb);
+            }
+        }
+
+        /// <summary>
         /// Converts the paragraph element to an HTML string.
         /// </summary>
         /// <returns>HTML string representation of the paragraph element.</returns>

@@ -319,5 +319,142 @@ namespace Jasmine.Format.Tests
             Assert.True(p1.IsEmpty);
             Assert.False(p2.IsEmpty);
         }
+
+        [Fact]
+        public void ClearStyle_ReturnsNewInstanceWithoutStyle()
+        {
+            // Arrange
+            var p = new HtmlP().Add("content").WithStyle("color:red; font-size:14px;");
+            
+            // Act
+            var result = p.ClearStyle();
+            
+            // Assert
+            Assert.NotSame(p, result);
+            Assert.Equal("<p>content</p>", result.ToHtml());
+            Assert.Null(result.Style);
+        }
+
+        [Fact]
+        public void ClearStyle_PreservesContent()
+        {
+            // Arrange
+            var p = new HtmlP()
+                .Add("Hello ")
+                .Add(new HtmlSpan("World", "blue"))
+                .WithStyle("text-align:center;");
+            
+            // Act
+            var result = p.ClearStyle();
+            
+            // Assert
+            Assert.Contains("Hello", result.ToHtml());
+            Assert.Contains("<span style=\"color:blue;\">World</span>", result.ToHtml());
+            Assert.DoesNotContain("text-align:center", result.ToHtml());
+        }
+
+        [Fact]
+        public void ClearStyle_ChainedCall_WorksCorrectly()
+        {
+            // Act
+            var p = new HtmlP()
+                .Add("text")
+                .WithStyle("color:red;")
+                .ClearStyle();
+            
+            // Assert
+            Assert.Equal("<p>text</p>", p.ToHtml());
+        }
+
+        [Fact]
+        public void ToPlainText_ReturnsPlainTextWithoutTags()
+        {
+            // Arrange
+            var p = new HtmlP().Add("Hello World");
+            
+            // Act
+            string result = p.ToPlainText();
+            
+            // Assert
+            Assert.Equal("Hello World", result);
+        }
+
+        [Fact]
+        public void ToPlainText_WithSpan_ReturnsTextOnly()
+        {
+            // Arrange
+            var p = new HtmlP()
+                .Add("Hello ")
+                .Add(new HtmlSpan("World", "blue"))
+                .Add("!");
+            
+            // Act
+            string result = p.ToPlainText();
+            
+            // Assert
+            Assert.Equal("Hello World!", result);
+        }
+
+        [Fact]
+        public void ToPlainText_WithLink_ReturnsLinkText()
+        {
+            // Arrange
+            var p = new HtmlP()
+                .Add("Visit ")
+                .Add(new HtmlA("example", "https://example.com"));
+            
+            // Act
+            string result = p.ToPlainText();
+            
+            // Assert
+            Assert.Equal("Visit example", result);
+        }
+
+        [Fact]
+        public void ToPlainText_WithImage_ReturnsAltText()
+        {
+            // Arrange
+            var p = new HtmlP()
+                .Add("Image: ")
+                .Add(new HtmlImg("https://example.com/img.jpg", "示例图片"));
+            
+            // Act
+            string result = p.ToPlainText();
+            
+            // Assert
+            Assert.Equal("Image: 示例图片", result);
+        }
+
+        [Fact]
+        public void ToPlainText_EmptyParagraph_ReturnsEmptyString()
+        {
+            // Arrange
+            var p = new HtmlP();
+            
+            // Act
+            string result = p.ToPlainText();
+            
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ToPlainText_ComplexContent_ReturnsConcatenatedText()
+        {
+            // Arrange
+            var p = new HtmlP()
+                .Add("User: ")
+                .Add(new HtmlSpan("John", "#0066cc"))
+                .Add(" - ")
+                .Add(new HtmlA("Profile", "https://example.com/profile"))
+                .Add(" - ")
+                .Add(new HtmlImg("avatar.jpg", "Avatar"));
+            
+            // Act
+            string result = p.ToPlainText();
+            
+            // Assert
+            Assert.Equal("User: John - Profile - Avatar", result);
+        }
     }
 }
